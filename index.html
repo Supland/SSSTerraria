@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<link rel="icon" href="" type="image/x-icon">  
+<title>SSSterraria</title>
+<html>
+<head>
+	<meta name="SSSterraria2026" content="width=device-width, initial-scale=1">
+	
+
+
+
+
+
+<style>
+
+.One {
+				width: 60%;
+				height: 1000px;
+				margin: auto;
+				
+				//color: #A5CCA5;
+				//padding: 10px 200px 0px 200px;
+				//box-shadow: 0 12px 80px 0 rgba(189, 189, 189, 0.53);
+}
+
+
+h4 {
+		margin:0;
+}
+
+
+.opl {
+
+				width: 100%;
+				height: 20px ;
+
+}
+
+.Changelogbox_1{
+	background-color: #ffcccc;
+	padding:10px;
+}
+.Changelogbox_2{
+	background-color: #ccffcc;
+	padding:10px;
+}
+	
+	
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+img {
+            transition: transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            max-width: 100%;
+            height: auto;
+        }
+</style>
+
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const images = document.querySelectorAll("img");
+            const MARGIN = 10; // 图片与屏幕边缘的最小留白距离（像素）
+
+            images.forEach(img => {
+                img.addEventListener("click", function(e) {
+                    e.stopPropagation();
+
+                    // 如果已经放大，则恢复原状
+                    if (this.dataset.zoomed === "true") {
+                        this.style.transform = "";
+                        this.dataset.zoomed = "false";
+                        return;
+                    }
+
+                    // 清除可能残留的 transform，确保 getBoundingClientRect 返回原始尺寸
+                    this.style.transform = "";
+
+                    // 获取期望的缩放倍数（从 data-zoom 读取，若没有则默认为 2）
+                    let desiredScale = parseFloat(this.dataset.zoom);
+                    if (isNaN(desiredScale) || desiredScale < 1) {
+                        desiredScale = 2; // 默认值
+                    }
+
+                    // 获取图片当前在视口中的尺寸和位置
+                    const rect = this.getBoundingClientRect();
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+
+                    // 图片中心点坐标
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    // 计算期望倍数下的边缘位置
+                    const leftDesired = centerX - (rect.width * desiredScale) / 2;
+                    const rightDesired = centerX + (rect.width * desiredScale) / 2;
+                    const topDesired = centerY - (rect.height * desiredScale) / 2;
+                    const bottomDesired = centerY + (rect.height * desiredScale) / 2;
+
+                    // 判断期望倍数是否会导致图片超出视口（考虑留白）
+                    const isOverflow = leftDesired < MARGIN ||
+                                      rightDesired > viewportWidth - MARGIN ||
+                                      topDesired < MARGIN ||
+                                      bottomDesired > viewportHeight - MARGIN;
+
+                    let finalScale = desiredScale;
+
+                    // 如果期望倍数会导致超出，则动态计算一个安全的倍数
+                    if (isOverflow) {
+                        // 尝试优先保留留白，若无法满足则降级为不留白（仅保证不超出屏幕）
+                        const marginAttempts = [MARGIN, 0];
+                        let safeScale = 1; // 最小为1（不变）
+
+                        for (let margin of marginAttempts) {
+                            // 根据四个方向计算允许的最大缩放倍数
+                            const maxScaleLeft = (centerX - margin) / (rect.width / 2);
+                            const maxScaleRight = (viewportWidth - margin - centerX) / (rect.width / 2);
+                            const maxScaleTop = (centerY - margin) / (rect.height / 2);
+                            const maxScaleBottom = (viewportHeight - margin - centerY) / (rect.height / 2);
+
+                            // 取四个方向的最小值作为当前留白下的最大允许倍数
+                            let candidate = Math.min(maxScaleLeft, maxScaleRight, maxScaleTop, maxScaleBottom);
+
+                            // 如果候选值至少能保证不变（>=1），就采用它，并停止尝试更小的留白
+                            if (candidate >= 1) {
+                                safeScale = candidate;
+                                break;
+                            }
+                            // 否则继续尝试不留白（margin=0）
+                        }
+
+                        // 最终缩放倍数不能超过期望值，也不能小于1
+                        finalScale = Math.min(safeScale, desiredScale);
+                    }
+
+                    // 应用计算出的缩放倍数
+                    this.style.transform = `scale(${finalScale})`;
+                    this.dataset.zoomed = "true";
+                });
+            });
+
+            // 窗口大小改变时，自动退出放大模式（避免布局错乱）
+            window.addEventListener("resize", function() {
+                images.forEach(img => {
+                    if (img.dataset.zoomed === "true") {
+                        img.style.transform = "";
+                        img.dataset.zoomed = "false";
+                    }
+                });
+            });
+        });
+    </script>
+
+</head>
+
+<body background="./image/Backgrounds.png" style="background-attachment: fixed;background-repeat:no-repeat;background-size:100% 100%;onload=a()">
+
+
+
+
+<h2 align="center"><font style="color: red;">S</font><font style="color: blue;">S</font><font style="color: green;">S</font> Terraria</h2>
+<hr/>
+
+
+<div class="One">
+
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div>
+
+
+
+
+
+<h2 align="center">基本</h2>
+<h4>这个泰拉瑞亚修改器截至目前100%的代码都是由AI编写的（90%DeepSeek，10%GitHub Cpoilot GPT-5)，编程语言C#</h4>
+
+<div class="opl"></div>
+<h4>项目于<font style="color: blue;">2026</font>年<font style="color: blue;">1</font>月<font style="color: blue;">30</font>日启动，折腾到2月2号，它已经有了雏形，功能如下：</h4>
+
+<ul>
+<li><h4>拥有可拖动的UI界面</h4></li>
+<div class="" ><img src="image/MainGUI.png" width="500" height="312"></div>
+<li><h4>几个简单的修改选项</h4></li>
+
+<li><h4>显示游戏一些信息</h4></li>
+<li><h5>0.1版本</h5></li>
+</ul>
+
+<div class="opl"></div>
+
+<!-- <h4>按键<font style="color:red;">W,A,S,D</font>，移动。</h4>
+<h4>按键<font style="color:red;">H</font>：恢复生命值</h4>
+<h4>按键<font style="color:red;">SHIFT</font>：冲刺，冷却时间80帧。</h4>
+<h4>按键<font style="color:red;">ESC</font>：暂停游戏。</h4>
+<h4>鼠标<font style="color:red;">左键</font>射击，<font style="color:red;">左键</font>+<font style="color:red;">空格键</font>使用武器的第二种攻击方式。（不用鼠标右键是因为这会触发浏览器的鼠标手势）</h4></br>
+ -->
+<h4>不用在意这些错误的快捷键，它和游戏内快捷键冲突，后续会修改的</h4>
+<h4>目前存在的<font style="color: red;">问题</font>： 似乎在低于100%缩放下有概率无法呼出窗口，需要重新注入启动游戏解决。</h4></br><hr/>
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div>
+
+
+
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><h2 align="center"> 使用</h2><div class="opl"></div>
+<h4 > 解压后有以下两个文件</h4>
+<div class="" ><img src="image/Files.png" width="682" height="90"></div>
+<h4 > 使用注入器注入Bootstrap.dll，然后Bootstrap.dll会调用SSSterraria.dll</h4>
+<h4 > Bootstrap.dll在这里只有一个调用SSSterraria的作用，在初期AI编写的代码入口无论如何都没被调用，但是用C++编写的却可以</h4>
+
+
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div>
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><h2 align="center"> 后续更新</h2>
+
+<h4>我的目标就是在泰拉瑞亚原版实现tmod的<span><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=2564645933&searchtext=hero%E2%80%99smod" target="_blank">Hero's mod</a></span></h4>
+
+
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div>
+<a href="" target="_blank"><h3>下载最新版本</h3>  </a><h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[暂不开放]</h6>
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div>
+
+
+<h4>
+
+
+
+
+
+
+
+
+
+
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div>
+
+
+
+
+
+
+
+
+
+<h3>版本跳转：</h3>
+<ul>
+
+<li><h4>正式版本：
+
+</h4></li>
+
+
+
+<li><h4>测试版本：
+<a href="#0.1" >0.1</a>&nbsp;&nbsp;&nbsp;
+<a href="#0.1.1" >0.1.1</a>&nbsp;&nbsp;&nbsp;
+<a href="#0.1.1.1" >0.1.1.1</a>&nbsp;&nbsp;&nbsp;
+<a href="#0.1.1.2" >0.1.1.2</a>&nbsp;&nbsp;&nbsp;
+<a href="#0.1.2" >0.1.2</a>&nbsp;&nbsp;&nbsp;
+<a href="#0.1.2.1" >0.1.2.1</a>&nbsp;&nbsp;&nbsp;
+<a href="#0.1.2.3" >0.1.2.3</a>&nbsp;&nbsp;&nbsp;
+<a href="#0.2beta" >0.2beta</a>&nbsp;&nbsp;&nbsp;
+</h4></li>
+</ul>
+
+
+
+
+
+
+
+<div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div><div class="opl"></div>
+
+<h3>更新日志：</h3>
+<h5>测试版本:</h5>
+<div style="padding:80px">
+
+
+	<div class="Changelogbox_2" id="0.2beta">
+	<h5 style="float:right;">2026/2/22_20:24</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.2beta*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.加入指令系统，为避免与常规指令系统产生冲突，这里一律使用\作为指令开头<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;指令系统，在聊天框输入指令回车即可执行。你可以通过指令直接实现对修改器的功能开关，赋值，输出信息<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;具体指令请输入\help查看</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.为UI交互增加音效提示</h5>
+
+
+	
+	
+	</div>
+
+	<div class="Changelogbox_1" id="0.1.2.3">
+	<h5 style="float:right;">2026/2/21_17:29</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.1.2.3*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.取消F9，F10，F11，F12快捷键</h5>
+	</div>
+
+	<div class="Changelogbox_2" id="0.1.2.2">
+	<h5 style="float:right;">2026/2/21_13:46</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.1.2.2*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.解决无限制制作不能在多人游戏中使用</h5>
+	</div>
+
+   <div class="Changelogbox_1" id="0.1.2.1">
+	<h5 style="float:right;">2026/2/21_13:00</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.1.2.1*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.新增功能：无限制制作，按钮位于杂项设置窗口，开启后玩家可以随意制作任何物品，不过会消耗材料。
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	此功能不能在TerrariaServer服务端使用
+	<br/><br>
+	<h6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	经过测试，同样的代码修改，在1.4.5版本服务端中失效，而在1.4.4.9能用，由此可见1.4.5版本加入了独立的验证，因此，无限制制作无法在多人游戏中生效</h6>
+	<br/>
+	</h5>
+	</div>
+
+    <div class="Changelogbox_2" id="0.1.2">
+	<h5 style="float:right;">2026/2/20_20:28</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.1.2*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.新的窗口“杂项设置窗口”，将功能模块的所有按钮放入这个窗口中<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个窗口由主窗口的“杂项窗口”按钮打开</br></h5>
+	<!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Image/MiscSettingsUI.png" width="66" height="150" data-zoom="6"  style="float:right;"/> -->
+
+	</div>
+	
+	<div class="Changelogbox_1" id="0.1.1.2">
+	<h5 style="float:right;">2026/2/20_18:04</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.1.1.2*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.新增“购买金钱增加”按钮，开启后在商人处购买物品不会扣钱，而是增加</h5>
+	</div>
+
+	<div class="Changelogbox_2" id="0.1.1.1">
+	<h5 style="float:right;">2026/2/11_09:21</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.1.1.1*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.修复“上帝模式”和“穿墙模式”两个按钮无法点击</h5>
+	</div>
+
+	
+	
+	<div class="Changelogbox_1" id="0.1.1">
+	<h5 style="float:right;">2026/2/2_22</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.1.1*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.修复： UI界面的指针会随着游戏缩放(GameViewMatrix.Zoom)而偏移位置，并且不会随着游戏UI缩放(UIScale)而缩放</h5>
+	<!-- <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.修复bug：使用冲刺移动到舞台之外。</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.削弱手雷。</h5> -->
+	</div>
+			
+			
+	<div class="Changelogbox_2" id="0.1">
+	<h5 style="float:right;">2026/2/2</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*SSSterraria0.1*</h5>
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.最初版本</h5>
+	</div>
+		
+
+</div>
+
+
+
+<br>
+
+
+
+
+
+</body>
+</html>
